@@ -112,8 +112,6 @@ function compile_pentanode() {
 
   git clone $PENTA_REPO $TMP_FOLDER
   cd $TMP_FOLDER/src
-  mkdir obj/support
-  mkdir obj/crypto
   make -f makefile.unix
   compile_error pentanode
   cp -a pentanoded $BINARY_FILE
