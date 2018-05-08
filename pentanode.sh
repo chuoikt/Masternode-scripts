@@ -1,10 +1,11 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
-CONFIG_FILE="pentanode.conf"
-BINARY_FILE="/usr/local/bin/pentanoded"
+CONFIG_FILE="PentaNode.conf"
+CONFIG_FOLDER=".PentaNode"
+BINARY_FILE="/usr/local/bin/PentaNoded"
 PENTA_REPO="https://github.com/PentaNode/Pentanode.git"
-COIN_TGZ='https://github.com/PentaNode/Pentanode/releases/download/v.1.0.0.0/pentanoded.gz'
+COIN_TGZ='https://github.com/PentaNode/Pentanode/releases/download/v.1.0.0.0/PentaNoded.gz'
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -31,9 +32,9 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [ -n "$(pidof pentanoded)" ]; then
+if [ -n "$(pidof PentaNoded)" ]; then
   echo -e "${GREEN}\c"
-  read -e -p "Pentanoded is already running. Do you want to add another MN? [Y/N]" NEW_PENTA
+  read -e -p "PentaNoded is already running. Do you want to add another MN? [Y/N]" NEW_PENTA
   echo -e "{NC}"
   clear
 else
@@ -43,7 +44,7 @@ fi
 
 function prepare_system() {
 
-echo -e "Prepare the system to install Pentanode master node."
+echo -e "Prepare the system to install Pentanode masternode."
 apt-get update >/dev/null 2>&1
 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade >/dev/null 2>&1
 apt install -y software-properties-common >/dev/null 2>&1
@@ -89,9 +90,9 @@ clear
 function deploy_binaries() {
   cd $TMP
   wget -q $COIN_TGZ >/dev/null 2>&1
-  gunzip pentanoded.gz >/dev/null 2>&1
-  chmod +x pentanoded >/dev/null 2>&1
-  cp pentanoded /usr/local/bin/ >/dev/null 2>&1
+  gunzip PentaNoded.gz >/dev/null 2>&1
+  chmod +x PentaNoded >/dev/null 2>&1
+  cp PentaNoded /usr/local/bin/ >/dev/null 2>&1
 }
 
 function ask_permission() {
@@ -113,8 +114,8 @@ function compile_pentanode() {
   git clone $PENTA_REPO $TMP_FOLDER
   cd $TMP_FOLDER/src
   make -f makefile.unix
-  compile_error pentanode
-  cp -a pentanoded $BINARY_FILE
+  compile_error PentaNode
+  cp -a PentaNoded $BINARY_FILE
   clear
 }
 
@@ -159,8 +160,8 @@ EOF
   systemctl start $PENTANODEUSER.service
   systemctl enable $PENTANODEUSER.service >/dev/null 2>&1
 
-  if [[ -z $(pidof pentanoded) ]]; then
-    echo -e "${RED}Pentanoded is not running${NC}, please investigate. You should start by running the following commands as root:"
+  if [[ -z $(pidof PentaNoded) ]]; then
+    echo -e "${RED}PentaNoded is not running${NC}, please investigate. You should start by running the following commands as root:"
     echo "systemctl start $PENTANODEUSER.service"
     echo "systemctl status $PENTANODEUSER.service"
     echo "less /var/log/syslog"
@@ -185,7 +186,7 @@ function ask_user() {
     echo "$PENTANODEUSER:$USERPASS" | chpasswd
 
     PENTANODEHOME=$(sudo -H -u $PENTANODEUSER bash -c 'echo $HOME')
-    DEFAULTPENTANODEFOLDER="$PENTANODEHOME/.pentanode"
+    DEFAULTPENTANODEFOLDER="$PENTANODEHOME/.PentaNode"
     read -p "Configuration folder: " -i $DEFAULTPENTANODEFOLDER -e PENTANODEFOLDER
     : ${PENTANODEFOLDER:=$DEFAULTPENTANODEFOLDER}
     mkdir -p $PENTANODEFOLDER
@@ -221,6 +222,9 @@ listen=1
 server=1
 daemon=1
 port=$PENTANODEPORT
+addnode=139.99.98.127
+addnode=139.99.98.128
+addnode=139.99.98.129
 EOF
 }
 
@@ -228,10 +232,10 @@ function create_key() {
   echo -e "Enter your ${RED}Masternode Private Key${NC}. Leave it blank to generate a new ${RED}Masternode Private Key${NC} for you:"
   read -e PENTANODEKEY
   if [[ -z "$PENTANODEKEY" ]]; then
-  sudo -u $PENTANODEUSER /usr/local/bin/pentanoded -conf=$PENTANODEFOLDER/$CONFIG_FILE -datadir=$PENTANODEFOLDER
+  sudo -u $PENTANODEUSER /usr/local/bin/PentaNoded -conf=$PENTANODEFOLDER/$CONFIG_FILE -datadir=$PENTANODEFOLDER
   sleep 5
-  if [ -z "$(pidof pentanoded)" ]; then
-   echo -e "${RED}Pentanoded server couldn't start. Check /var/log/syslog for errors.{$NC}"
+  if [ -z "$(pidof PentaNoded)" ]; then
+   echo -e "${RED}PentaNoded server couldn't start. Check /var/log/syslog for errors.{$NC}"
    exit 1
   fi
   PENTANODEKEY=$(sudo -u $PENTANODEUSER $BINARY_FILE -conf=$PENTANODEFOLDER/$CONFIG_FILE -datadir=$PENTANODEFOLDER masternode genkey)
@@ -297,7 +301,7 @@ elif [[ "$NEW_PENTA" == "new" ]]; then
   fi
   setup_node
 else
-  echo -e "${GREEN}Pentanoded already running.${NC}"
+  echo -e "${GREEN}PentaNoded already running.${NC}"
   exit 0
 fi
 
