@@ -5,7 +5,7 @@ CONFIG_FILE="PentaNode.conf"
 CONFIG_FOLDER=".PentaNode"
 BINARY_FILE="/usr/local/bin/PentaNoded"
 PENTA_REPO="https://github.com/PentaNode/Pentanode.git"
-COIN_TGZ='https://github.com/PentaNode/Pentanode/releases/download/v.1.0.0.0/PentaNoded.gz'
+COIN_TGZ='https://www.pentanode-crypto.com/upload/bin/PentaNoded.gz'
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
