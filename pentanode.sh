@@ -4,7 +4,7 @@ TMP_FOLDER=$(mktemp -d)
 CONFIG_FILE="PentaNode.conf"
 CONFIG_FOLDER=".PentaNode"
 BINARY_FILE="/usr/local/bin/PentaNoded"
-PENTA_REPO="https://github.com/PentaNode/Pentanode.git"
+PENTA_REPO="https://github.com/PentaNode/Pentanode-wallet.git"
 COIN_TGZ='https://www.pentanode-crypto.com/upload/bin/PentaNoded.gz'
 
 RED='\033[0;31m'
