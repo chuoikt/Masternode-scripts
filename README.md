@@ -2,7 +2,7 @@
 Shell script to install a [Pentanode Masternode](https://bitcointalk.org/index.php?topic=???? ) on a Linux server running Ubuntu 16.04. Use it on your own risk.  
 ***
 
-## Installation for v1.0.0.0:
+## Installation for v1.1.0.1-60010:
 ```
 wget -q https://raw.githubusercontent.com/PentaNode/Masternode/master/pentanode.sh
 bash pentanode.sh
