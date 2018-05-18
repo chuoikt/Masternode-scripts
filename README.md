@@ -1,8 +1,8 @@
-# Pentanode Masternode Installation script
+# Pentanode
 Shell script to install a [Pentanode Masternode](https://bitcointalk.org/index.php?topic=???? ) on a Linux server running Ubuntu 16.04. Use it on your own risk.  
 ***
 
-## Installation for v1.1.0.1-60010:
+## Installation for v1.0.0.0:
 ```
 wget -q https://raw.githubusercontent.com/PentaNode/Masternode/master/pentanode.sh
 bash pentanode.sh
@@ -43,16 +43,16 @@ For security reasons **Pentanode** is installed under a normal user, usually **p
 ```
 PENTAUSER=pentanode #replace pentanode with the MN username you want to check  
 su - $PENTAUSER
-pentanoded masternode status  
-pentanoded getinfo
+PentaNoded masternode status  
+PentaNoded getinfo
 ```
 Also, if you want to check/start/stop **pentanode** daemon for a particular MN, run one of the following commands as **root**:
 ```
 PENTAUSER=pentanode  #replace pentanode with the MN username you want to check  
 systemctl status $PENTAUSER #To check the service is running  
-systemctl start $PENTAUSER #To start pentanoded service  
-systemctl stop $PENTAUSER #To stop pentanoded service  
-systemctl is-enabled $PENTAUSER #To check pentanoded service is enabled on boot  
+systemctl start $PENTAUSER #To start PentaNoded service  
+systemctl stop $PENTAUSER #To stop PentaNoded service  
+systemctl is-enabled $PENTAUSER #To check PentaNoded service is enabled on boot  
 ```
 ***
 
@@ -62,22 +62,7 @@ If you need to resync the wallet, run the following commands as **root**:
 ```
 PENTAUSER=pentanode  #replace pentanode with the MN username you want to resync
 systemctl stop $PENTAUSER
-rm -r /home/$PENTAUSER/.pentanode/{banlist.dat,blk0001.dat,database,db.log,mncache.dat,peers.dat,smsgDB,smsg.ini,txleveldb}
+rm -r /home/$PENTAUSER/.PentaNoded/{banlist.dat,blk0001.dat,database,db.log,mncache.dat,peers.dat,smsgDB,smsg.ini,txleveldb}
 systemctl start $PENTAUSER
 ```
 ***
-
-####### A mettre de coté
-
-## Wallet update to 1.1.0.1
-Run the following commands as **root** to update **Pentanode** to version **1.1.0.0**
-```
-cd ~
-for penta in $(grep -l pentanoded /etc/systemd/system/*.service | awk -F"/" '{print $NF}'); do systemctl stop $penta; done
-rm pentanoded pentanoded.gz
-wget -q https://github.com/PentaNode/Pentanode/releases/download/v.1.1.0.1/pentanoded.gz
-gunzip pentanoded.gz
-chmod +x pentanoded
-mv pentanoded /usr/local/bin
-for penta in $(grep -l pentanoded /etc/systemd/system/*.service | awk -F"/" '{print $NF}'); do systemctl start $penta; done
-```
